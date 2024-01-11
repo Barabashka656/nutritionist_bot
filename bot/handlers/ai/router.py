@@ -19,7 +19,6 @@ async def assistant_dialogue(message: types.Message, state: FSMContext):
     fsm_data = await state.get_data()
     thread_id = fsm_data.get('thread_id')
     response, thread_id = await OpenAIService.get_assistant_response(thread_id, message.text)
-    print(response)
     
     await msg.edit_text(text=response)
     await state.update_data(thread_id=thread_id)
@@ -71,10 +70,8 @@ async def handle_voice(message: types.Message, state: FSMContext):
     thread_id = fsm_data.get('thread_id')
 
     encrypt_imgage = await OpenAIService.get_response_by_image(bytes_image)
-    print(encrypt_imgage)
     response, thread_id = await OpenAIService.get_assistant_response(thread_id, encrypt_imgage)
     bytes_voice = await OpenAIService.text_to_speech(response)
-    print(thread_id)
     await msg.delete()
     await message.answer_voice(
         BufferedInputFile(
